@@ -51,7 +51,7 @@ public class Heap<E> {
         Object[] newArray = new Object[capacity];
 
         // 기존 배열에서 새로운 배열로 요소들을 복사한다.
-        for (int i = 0; i < size; i++) {
+        for (int i = 1; i <= size; i++) {
             newArray[i] = array[i];
         }
 
@@ -202,7 +202,7 @@ public class Heap<E> {
         // 루트 노드 삭제
         array[1] = null;
 
-        int parentIndex = 1;  //
+        int parentIndex = 1;
         int childIndex;
 
         // 왼쪽 자식 노드가 없을 때까지 반복
