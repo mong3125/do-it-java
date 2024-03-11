@@ -5,8 +5,9 @@ package 그리디;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.StringTokenizer;
 
 public class BOJ1931 {
@@ -18,6 +19,7 @@ public class BOJ1931 {
         int n = Integer.parseInt(br.readLine());
         conferences = new int[n][2];
 
+        HashMap<Integer, Integer> hashMap = new HashMap<>();
         for (int i = 0; i < n; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
             conferences[i][0] = Integer.parseInt(st.nextToken());   // 시작시간
