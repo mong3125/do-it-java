@@ -1,9 +1,11 @@
+package chapter04;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class BOJ_11399 {
+public class Problem18_BOJ11399 {
     public static void main(String[] args) throws IOException {
         // ---입력---
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
