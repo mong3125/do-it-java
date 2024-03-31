@@ -11,6 +11,7 @@ public class BOJ3273_두수의합 {
     static int x;
     static int[] nums;
     public static void main(String[] args) throws IOException {
+        // 입력
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         n = Integer.parseInt(br.readLine());
         nums = new int[n];
@@ -22,6 +23,7 @@ public class BOJ3273_두수의합 {
 
         x = Integer.parseInt(br.readLine());
 
+        // 풀이
         Arrays.sort(nums);
 
         int front = 0;
@@ -39,6 +41,7 @@ public class BOJ3273_두수의합 {
             }
         }
 
+        // 출력
         System.out.println(count);
     }
 }
