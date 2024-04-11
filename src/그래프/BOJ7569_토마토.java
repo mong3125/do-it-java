@@ -8,11 +8,11 @@ import java.util.*;
 public class BOJ7569_토마토 {
 
     static int M, N, H;
-    static Queue<int[]> ripen = new LinkedList<>();   // 익은 토마토 위치
-    static Queue<int[]> temp = new LinkedList<>();   // 익은 토마토 위치
-    static int notRipenTomatos = 0;
+    static int[][][] box;
 
-    // 방향
+    static Queue<int[]> ripen = new LinkedList<>();   // 익은 토마토 위치
+    static int notRipenTomatos = 0;
+    static int result = 1;
     static int[][] directions = {
             {1, 0, 0},
             {-1, 0, 0},
@@ -22,11 +22,6 @@ public class BOJ7569_토마토 {
             {0, 0, -1},
     };
 
-    // 박스
-    static int[][][] box;
-
-    // 방문 여부
-    static boolean[][][] visited;
     public static void main(String[] args) throws IOException {
         // == 입력 == //
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -36,7 +31,6 @@ public class BOJ7569_토마토 {
         N = Integer.parseInt(st.nextToken());
         H = Integer.parseInt(st.nextToken());
         box = new int[H][N][M];
-        visited = new boolean[H][N][M];
 
         for (int i = 0; i < H; i++) {
             for (int j = 0; j < N; j++) {
@@ -52,47 +46,33 @@ public class BOJ7569_토마토 {
         }
 
         // == 풀이 == //
-        int count = 0;
-
-        // 새로 익은 토마토가 없을때까지 반복
-        while (!ripen.isEmpty()) {
-            bfs();
-            count++;
-        }
+        bfs();
 
         // 모든 토마토가 익은게 아니라면 -1 반환
         if (notRipenTomatos > 0) {
-            count = 0;
+            result = 0;
         }
 
-        System.out.println(count - 1);
+        // == 출력 == //
+        System.out.println(result - 1);
     }
 
     public static void bfs() {
-        temp.clear();
-
         while (!ripen.isEmpty()) {
             int[] tomato = ripen.remove();
-            if (visited[tomato[0]][tomato[1]][tomato[2]]) continue;
+            for (int[] direction : directions) {
+                int z = tomato[0] + direction[0];
+                int y = tomato[1] + direction[1];
+                int x = tomato[2] + direction[2];
 
-            visited[tomato[0]][tomato[1]][tomato[2]] = true;
-            ripe(tomato);
-        }
+                if (isInRange(z, y, x)) {
+                    if (box[z][y][x] == 0) {
+                        box[z][y][x] = box[tomato[0]][tomato[1]][tomato[2]] + 1;
+                        result = Math.max(result, box[z][y][x]);
+                        notRipenTomatos--;
 
-        ripen.addAll(temp);
-    }
-
-    public static void ripe(int[] tomato) {
-        for (int[] direction : directions) {
-            int z = tomato[0] + direction[0];
-            int y = tomato[1] + direction[1];
-            int x = tomato[2] + direction[2];
-
-            if (isInRange(z, y, x)) {
-                if (box[z][y][x] == 0) {
-                    box[z][y][x] = 1;
-                    notRipenTomatos--;
-                    temp.add(new int[]{z, y, x});
+                        ripen.add(new int[]{z, y, x});
+                    }
                 }
             }
         }
