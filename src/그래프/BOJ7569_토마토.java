@@ -10,7 +10,7 @@ public class BOJ7569_토마토 {
     static int M, N, H;
     static Queue<int[]> ripen = new LinkedList<>();   // 익은 토마토 위치
     static Queue<int[]> temp = new LinkedList<>();   // 익은 토마토 위치
-
+    static int notRipenTomatos = 0;
 
     // 방향
     static int[][] directions = {
@@ -46,34 +46,29 @@ public class BOJ7569_토마토 {
 
                     // 익은 토마토 위치 저장
                     if (box[i][j][k] == 1) ripen.add(new int[]{i, j, k});
+                    else if (box[i][j][k] == 0) notRipenTomatos++;
                 }
             }
         }
 
         // == 풀이 == //
         int count = 0;
-        while (true) {
-            boolean isChanged = bfs();
 
-            // 더 이상 익힐 수 있는 토마토가 없을때
-            if (!isChanged) {
-                // 만약 전부 익었다면 그냥 멈추기
-                if (isAllRipen()) {
-                    break;
-                // 안 익은 토마토가 존재한다면 -1 반환
-                } else {
-                    count = -1;
-                    break;
-                }
-            }
-
+        // 새로 익은 토마토가 없을때까지 반복
+        while (!ripen.isEmpty()) {
+            bfs();
             count++;
         }
 
-        System.out.println(count);
+        // 모든 토마토가 익은게 아니라면 -1 반환
+        if (notRipenTomatos > 0) {
+            count = 0;
+        }
+
+        System.out.println(count - 1);
     }
 
-    public static boolean bfs() {
+    public static void bfs() {
         temp.clear();
 
         while (!ripen.isEmpty()) {
@@ -85,7 +80,6 @@ public class BOJ7569_토마토 {
         }
 
         ripen.addAll(temp);
-        return !temp.isEmpty();
     }
 
     public static void ripe(int[] tomato) {
@@ -97,22 +91,11 @@ public class BOJ7569_토마토 {
             if (isInRange(z, y, x)) {
                 if (box[z][y][x] == 0) {
                     box[z][y][x] = 1;
+                    notRipenTomatos--;
                     temp.add(new int[]{z, y, x});
                 }
             }
         }
-    }
-
-    public static boolean isAllRipen() {
-        for (int i = 0; i < H; i++) {
-            for (int j = 0; j < N; j++) {
-                for (int k = 0; k < M; k++) {
-                    if (box[i][j][k] == 0) return false;
-                }
-            }
-        }
-
-        return true;
     }
 
     public static boolean isInRange(int z, int y, int x) {
