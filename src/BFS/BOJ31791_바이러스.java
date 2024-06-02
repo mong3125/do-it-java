@@ -11,7 +11,7 @@ public class BOJ31791_바이러스 {
 
     static int[][] board;
     static boolean[][] visited;
-    static PriorityQueue<int[]> pq = new PriorityQueue<>(((o1, o2) -> o1[2] - o2[2]));
+    static PriorityQueue<Point> pq = new PriorityQueue<>();
 
     static int[][] direction = new int[][]{
             {1, 0},
@@ -53,7 +53,7 @@ public class BOJ31791_바이러스 {
                     case '*':
                         board[i][j] = -Tg - 1;
                         visited[i][j] = true;
-                        pq.add(new int[] {j, i, -Tg});
+                        pq.add(new Point(i, j, Tg));
                         break;
                     case '#':
                         board[i][j] = Tb;
@@ -67,21 +67,21 @@ public class BOJ31791_바이러스 {
 
     public static void bfs() {
         while (!pq.isEmpty()) {
-            int[] now = pq.poll();
+            Point p = pq.poll();
 
-            if (now[2] >= 0) continue;
+            if (p.life <= 0) continue;
 
             for (int[] d : direction) {
-                int x = now[0] + d[0];
-                int y = now[1] + d[1];
+                int x = p.x + d[0];
+                int y = p.y + d[1];
 
                 if (isInRange(y, x)) {
                     if (visited[y][x]) continue;
 
                     visited[y][x] = true;
 
-                    board[y][x] = board[y][x] + now[2];
-                    pq.add(new int[] {x, y, board[y][x] + 1});
+                    board[y][x] = board[y][x] - p.life;
+                    pq.add(new Point(y, x, -board[y][x] - 1));
                 }
             }
         }
@@ -106,5 +106,22 @@ public class BOJ31791_바이러스 {
 
     public static boolean isInRange(int y, int x) {
         return x >= 0 && x < M && y >= 0 && y < N;
+    }
+
+    static class Point implements Comparable<Point> {
+        private final int x;
+        private final int y;
+        private final int life;
+
+        Point(int y, int x, int life) {
+            this.x = x;
+            this.y = y;
+            this.life = life;
+        }
+
+        @Override
+        public int compareTo(Point o) {
+            return o.life - life;
+        }
     }
 }
